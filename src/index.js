@@ -20,12 +20,9 @@ app.get('/', (request, response) => {
     response.json({message: "Today, my life resumes..."});
 });
 
-// API route, sends back a JSON response
-app.get('/json',(request, response) => {
-
-    response.json({'message':"Hello world!"})
-});
-
+// Routing
+const importedPostRouting = require('./posts/postRoutes');  // Only imports the router
+app.use('/posts', importedPostRouting);  // Tell server to use the router (attach it to the server)
 
 // Run the server by making it 'listen' for network traffic
 app.listen(PORT, HOST, () => {
