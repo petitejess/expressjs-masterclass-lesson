@@ -10,6 +10,12 @@ const app = express();  // a server instance
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
+// Setup Firebase
+const firebaseAdmin = require('firebase-admin');
+firebaseAdmin.initializeApp({
+  credential: firebaseAdmin.credential.cert(JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS))
+});  // initialise app
+
 // Testing out .env
 console.log(`Env var message was: ${process.env.NICE_MESSAGE}`);
 
