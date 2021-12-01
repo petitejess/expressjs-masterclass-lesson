@@ -1,3 +1,6 @@
+// Setup .env
+const  dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 // Initialize Express as an instance named "app".
 const app = express();  // a server instance
@@ -6,6 +9,9 @@ const app = express();  // a server instance
 // const PORT = 3000;
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
+
+// Testing out .env
+console.log(`Env var message was: ${process.env.NICE_MESSAGE}`);
 
 // Best settings for setting up Express as an API server to receive and process JSON & form data.
 app.use(express.json());
