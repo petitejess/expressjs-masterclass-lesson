@@ -36,6 +36,9 @@ app.get('/', (request, response) => {
 const importedPostRouting = require('./posts/postRoutes');  // Only imports the router
 app.use('/posts', importedPostRouting);  // Tell server to use the router (attach it to the server)
 
+const importedUserRouting = require('./users/userRoutes');
+app.use('/users', importedUserRouting);
+
 // Run the server by making it 'listen' for network traffic
 app.listen(PORT, HOST, () => {
     // Weird in-line conditional string interpolation to handle "0.0.0.0" -> "localhost" conversion
