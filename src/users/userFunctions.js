@@ -1,6 +1,7 @@
 // Require then initialise
 const firebaseClient = require('firebase/app');
 firebaseClient.initializeApp(JSON.parse(process.env.FIREBASE_CLIENT_CONFIG));  // initialise
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
 // Already initialised in index.js, just requiring here
 const firebaseAdmin = require('firebase-admin');
@@ -26,6 +27,32 @@ async function signUpUser(userDetails){
   });
 }
 
+async function signInUser(userDetails) {
+  const firebaseClientAuth = getAuth();
+
+  let signInResult = signInWithEmailAndPassword(firebaseClientAuth, userDetails.email, userDetails.password)
+    .then(async (userCredential) => {
+      let userIdToken = await firebaseClientAuth.currentUser.getIdTokenResult(false);
+      console.log(`userIdToken: ${JSON.stringify(userIdToken)}`);
+      return {
+        idToken: userIdToken.token,
+        refreshToken: userCredential.user.refreshToken,
+        email: userCredential.user.email,
+        emailVerified: userCredential.user.emailVerified,
+        displayName: userCredential.user.displayName,
+        photoURL: userCredential.user.photoURL,
+        uid: userCredential.user.uid
+      };
+    })
+    .catch(error => {
+      console.log(`Internal sign-up function error is:\n${error}`);
+      return {error:error};
+    });
+
+  return signInResult;
+}
+
 module.exports = {
-  signUpUser
+  signUpUser,
+  signInUser
 };

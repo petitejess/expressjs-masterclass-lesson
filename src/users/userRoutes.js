@@ -1,9 +1,8 @@
-const { response } = require('express');
 const express = require('express');
 
 const routes = express.Router();
 
-const { signUpUser } = require('./userFunctions');
+const { signUpUser, signInUser } = require('./userFunctions');
 
 routes.post("/sign-up", async (request, response) => {
   let newUserDetails = {
@@ -25,7 +24,33 @@ routes.post("/sign-up", async (request, response) => {
     return;
   }
 
-  response.json(signUpResult);
+  // response.json(signUpResult);
+  let signInResult = await signInUser(newUserDetails);
+
+  if (signInResult.error != null) {
+    console.log("Sign in failed, returning error to requester");
+    response.json(signInResult);
+    return;
+  }
+
+  response.json(signInResult);
+});
+
+routes.post("/sign-in", async (request, response) => {
+  let existingUserDetails = {
+    email: request.body.email,
+    password: request.body.password,
+  }
+
+  let signInResult = await signInUser(existingUserDetails);
+
+  if (signInResult.error != null){
+    console.log("Sign in failed, returning error to requester");
+    response.json(signInResult);
+    return;
+  }
+  
+  response.json(signInResult);
 });
 
 module.exports = routes;
