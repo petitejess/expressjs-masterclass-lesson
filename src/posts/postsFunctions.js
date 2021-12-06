@@ -21,6 +21,11 @@ async function createSpecificPost(postDetails) {
   return creationResult;
 }
 
+// get post by authorID
+async function getAllPostByAuthorID(authorID) {
+  let queryResult = await Post.find({postSuthorID: authorID});
+  return queryResult;
+}
 
 function randomNumberGenerator() {
   return 3;
@@ -34,5 +39,6 @@ module.exports = {
   randomNumberGenerator,
   someAsyncFunction,
   getAllPosts,
-  createSpecificPost
+  createSpecificPost,
+  getAllPostByAuthorID
 }
