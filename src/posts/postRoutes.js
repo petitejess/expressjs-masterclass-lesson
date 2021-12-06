@@ -7,12 +7,20 @@ const routes = express.Router();
 
 // This is the "root" route for the Router instance. 
 // Its actual name in the URL will depend on how it's configured in src/index.js
+
+// get post by authorID
+routes.get('/:authorID', async (request, response) => {
+  let allAuthorPosts = await getAllPostByAuthorID(request.params.authorID);
+
+  response.json(allAuthorPosts);
+});
+
 // get all posts
 routes.get('/', async (request, response) => {
-    let allPosts = await getAllPosts();
-    response.json(allPosts);
+  let allPosts = await getAllPosts();
+  response.json(allPosts);
 
-    // response.json(`Received a request on ${request.originalUrl}`);
+  // response.json(`Received a request on ${request.originalUrl}`);
 });
 
 // create a new post
@@ -25,13 +33,6 @@ routes.post('/', async (request, response) => {
   });
 
   response.json(creationResult);
-});
-
-// get post by authorID
-routes.get('/:authorID', async (request, response) => {
-  let allAuthorPosts = await getAllPostByAuthorID(request.params.authorID);
-
-  response.json(allAuthorPosts);
 });
 
 
