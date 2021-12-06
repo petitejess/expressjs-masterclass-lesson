@@ -1,16 +1,33 @@
 const { request } = require('express');
 const express = require('express');
-const { randomNumberGenerator, someAsyncFunction } = require('./postsFunctions');
+const { randomNumberGenerator, someAsyncFunction, getAllPosts, createSpecificPost } = require('./postsFunctions');
 
 // Create a bundle of routes. We'll export this out and then import it into src/index.js.
 const routes = express.Router();
 
 // This is the "root" route for the Router instance. 
 // Its actual name in the URL will depend on how it's configured in src/index.js
-routes.get('/', (request, response) => {
+// get all posts
+routes.get('/', async (request, response) => {
+    let allPosts = await getAllPosts();
+    response.json(allPosts);
 
-    response.json(`Received a request on ${request.originalUrl}`);
+    // response.json(`Received a request on ${request.originalUrl}`);
 });
+
+// create a new post
+routes.post('/', async (request, response) => {
+  let creationResult = await createSpecificPost({
+    postTitle: request.body.postTitle,
+    postContent: request.body.postContent,
+    postAuthorID: request.body.postAuthorID,
+    postRating: request.body.postRating
+  });
+
+  response.json(creationResult);
+});
+
+
 
 // Testing functions
 routes.get('/randomNumber', (request, response) => {
@@ -38,23 +55,23 @@ routes.get('/:postID', (request, response) => {
 
 // });
 
-// Use Postman or another HTTP tool to visit a POST route.
-routes.post('/:postID', (request, response) => {
-  // response.json(`Received a POST request for a post with ID of ${request.params.postID}`);
+// // Use Postman or another HTTP tool to visit a POST route.
+// routes.post('/:postID', (request, response) => {
+//   // response.json(`Received a POST request for a post with ID of ${request.params.postID}`);
 
-  let submittedData = request.body;
-  let submittedName = request.body.name.toUpperCase();
-  let submittedPokemon = request.body.favouritePokemon.name;
+//   let submittedData = request.body;
+//   let submittedName = request.body.name.toUpperCase();
+//   let submittedPokemon = request.body.favouritePokemon.name;
 
-  // Can do sanitising etc before saving to DB
-  submittedData += submittedName;
-  submittedData += submittedPokemon;
+//   // Can do sanitising etc before saving to DB
+//   submittedData += submittedName;
+//   submittedData += submittedPokemon;
 
-  console.log(JSON.stringify(submittedData));
+//   console.log(JSON.stringify(submittedData));
 
-  // response.json(`Received ${request.body.name}!!`);
-  // response.json(`Received body ${JSON.stringify(request.body)}, submitted name is ${JSON.stringify(request.body.name)}!!`);
-  response.json(`Received body ${submittedData}, submitted name is ${submittedName}, submitted fav Pokemon is ${submittedPokemon}!!`);
-});
+//   // response.json(`Received ${request.body.name}!!`);
+//   // response.json(`Received body ${JSON.stringify(request.body)}, submitted name is ${JSON.stringify(request.body.name)}!!`);
+//   response.json(`Received body ${submittedData}, submitted name is ${submittedName}, submitted fav Pokemon is ${submittedPokemon}!!`);
+// });
 
 module.exports = routes;
