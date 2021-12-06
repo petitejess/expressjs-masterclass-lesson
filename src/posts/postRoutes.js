@@ -28,7 +28,7 @@ routes.post('/', async (request, response) => {
 });
 
 // get post by authorID
-routes.post('/:authorID', async (request, response) => {
+routes.get('/:authorID', async (request, response) => {
   let allAuthorPosts = await getAllPostByAuthorID(request.params.authorID);
 
   response.json(allAuthorPosts);
